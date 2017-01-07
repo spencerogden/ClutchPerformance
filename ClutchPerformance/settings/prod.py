@@ -11,3 +11,5 @@ EMAIL_HOST_PASSWORD = 'vrpt@7GPcwej'
 EMAIL_USE_SSL = True
 
 ALLOWED_HOSTS = ['spencerogden.pythonanywhere.com']
+
+STATIC_ROOT = os.path.join(PROJECT_HOME, "static")
