@@ -3,7 +3,7 @@
 {% block title %}ClutchPerformance{% endblock %}
 
 {% block content %}
-Hello World Template: {{ user }}
+Hello World Template: {{ user.username }} and {{ user.email }}
 <br><br>
 <a href="{% url 'auth_login' %}">Login</a>
 {% endblock %}
