@@ -1,1 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}ClutchPerformance{% endblock %}
+
+{% block content %}
 Hello World Template: {{ user }}
+<br><br>
+<a href="{% url 'auth_login' %}">Login</a>
+{% endblock %}
