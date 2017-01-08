@@ -41,6 +41,7 @@ PREREQ_APPS = [
 
 PROJECT_APPS = [
     'users',
+    'landingpage',
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
