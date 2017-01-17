@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+
+from organizations.backends import invitation_backend
   
 urlpatterns = [
     url(r'^', include('landingpage.urls')), # add a home views
@@ -23,5 +25,6 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^users/', include('registration.backends.hmac.urls')),
-    
+    url(r'^accounts/',include('organizations.urls')),
+    url(r'^invitations/',include(invitation_backend().get_urls())),
 ]

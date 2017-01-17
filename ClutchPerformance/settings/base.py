@@ -37,6 +37,7 @@ PREREQ_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'organizations',
 ]
 
 PROJECT_APPS = [
@@ -127,3 +128,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
+
+ORGS_SLUGFIELD = 'django_extensions.db.fields.AutoSlugField'
