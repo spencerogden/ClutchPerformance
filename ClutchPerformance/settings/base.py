@@ -129,4 +129,4 @@ STATIC_URL = '/static/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-ORGS_SLUGFIELD = 'django_extensions.db.fields.AutoSlugField'
+#ORGS_SLUGFIELD = 'django_extensions.db.fields.AutoSlugField'
