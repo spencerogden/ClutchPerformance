@@ -1,0 +1,14 @@
+Create virtual env:
+WORKON_HOME = ~/.virtualenv
+mkvirtualenv -p python3.6 clutchperformance
+
+To start virtualenv:
+
+workon clutchperformance
+
+Install requirements:
+pip install -r requirements/dev.txt
+
+
+Run dev server:
+./manage.py runserver --settings ClutchPerformance.settings.dev
