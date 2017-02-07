@@ -1,13 +1,22 @@
 from selenium import webdriver
+import unittest
 
-browser = webdriver.Firefox(executable_path='./geckodriver')
+class ClutchTest(unittest.TestCase):
+    def setUp(self):
+        self.browser = webdriver.Firefox(executable_path='./geckodriver')
+
+    def tearDown(self):
+        self.browser.quit()
+    
+class NewVisitorTest(ClutchTest):
+    def test_can_see_hompage(self):
+        #  hears about a new site and goes to the home page
+        self.browser.get('http://localhost:8000')
+
+        # Adam sees that the name of the app is ClutchPerformance
+        assert 'ClutchPerformance' in self.browser.title, "Browser title was: " + self.browser.title
 
 
-#  hears about a new site and goes to the home page
-browser.get('http://localhost:8000')
-
-# Adam sees that the name of the app is ClutchPerformance
-assert 'ClutchPerformance' in browser.title
 
 # Adam reads about the functionality and features 
 
@@ -46,3 +55,8 @@ assert 'ClutchPerformance' in browser.title
 # Adam uploads a text log file to TeamAlpha
 
 # Adam sees the log fil listed in the team files
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
+    
+    
