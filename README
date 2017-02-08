@@ -9,6 +9,14 @@ workon clutchperformance
 Install requirements:
 pip install -r requirements/dev.txt
 
+Select settings module:
+export DJANGO_SETTINGS_MODULE=ClutchPerformance.settings.dev
+
+Run Functional Tests:
+python tests/functional_tests.py
+
+Run Unit Tests:
+./manage.py test
 
 Run dev server:
 ./manage.py runserver --settings ClutchPerformance.settings.dev
