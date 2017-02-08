@@ -16,13 +16,16 @@ class NewVisitorTest(ClutchTest):
         # Adam sees that the name of the app is ClutchPerformance
         assert 'ClutchPerformance' in self.browser.title, "Browser title was: " + self.browser.title
 
-
-
 # Adam reads about the functionality and features 
 
 # Adam signs up for an account
 
 # Adam logs in
+class LoginTest(ClutchTest):
+    def test_see_login_link(self):
+        self.browser.get('http://localhost:8000')
+        login_link = self.browser.find_element_by_link_text("Log in")
+        
 
 # Adam confirms email address
 
