@@ -23,7 +23,9 @@ class NewVisitorTest(ClutchTest):
         
     def test_bootstrap_used_for_styling(self):
         self.browser.get('http://localhost:8000')
-        assert True
+        greeting_div = self.browser.find_element_by_id('greeting')
+        self.assertAlmostEqual(greeting_div.size['height'],116)
+        
 # Adam signs up for an account
 
 # Adam logs in
