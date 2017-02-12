@@ -20,6 +20,10 @@ class NewVisitorTest(ClutchTest):
     def test_can_see_homepage_body(self):
         self.browser.get('http://localhost:8000')
         assert 'Hello World Template' in self.browser.page_source
+        
+    def test_bootstrap_used_for_styling(self):
+        self.browser.get('http://localhost:8000')
+        assert True
 # Adam signs up for an account
 
 # Adam logs in
