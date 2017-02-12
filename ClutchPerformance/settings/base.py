@@ -41,7 +41,6 @@ PREREQ_APPS = [
 ]
 
 PROJECT_APPS = [
-    'users',
     'landingpage',
 ]
 
@@ -88,7 +87,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
@@ -126,7 +124,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
-ACCOUNT_ACTIVATION_DAYS = 7
-
-#ORGS_SLUGFIELD = 'django_extensions.db.fields.AutoSlugField'
