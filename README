@@ -20,3 +20,6 @@ Run Unit Tests:
 
 Run dev server:
 ./manage.py runserver --settings ClutchPerformance.settings.dev
+
+Show all urls:
+./manage.py show_urls
