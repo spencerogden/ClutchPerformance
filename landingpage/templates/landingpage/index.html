@@ -3,7 +3,5 @@
 {% block title %}ClutchPerformance{% endblock %}
 
 {% block content %}
-Hello World Template: {{ user.username }} and {{ user.email }}
-<br><br>
-<a href="{% url 'login' %}">Login</a>
+<div id="greeting" class="jumbotron">Hello World Template: {{ user.username }} and {{ user.email }}</div>
 {% endblock %}
