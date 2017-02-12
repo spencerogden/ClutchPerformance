@@ -26,8 +26,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^users/', include('registration.backends.hmac.urls')),
-    url(r'^accounts/',include('organizations.urls')),
+    url(r'^team/',include('organizations.urls')),
     url(r'^invitations/',include(invitation_backend().get_urls())),
     url(r'^registration/',include(registration_backend().get_urls())),
-
 ]
