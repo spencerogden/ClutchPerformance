@@ -10,14 +10,16 @@ class ClutchTest(unittest.TestCase):
     
 class NewVisitorTest(ClutchTest):
     def test_can_see_hompage(self):
-        #  hears about a new site and goes to the home page
+        # Adam hears about a new site and goes to the home page
         self.browser.get('http://localhost:8000')
 
         # Adam sees that the name of the app is ClutchPerformance
         assert 'ClutchPerformance' in self.browser.title, "Browser title was: " + self.browser.title
 
-# Adam reads about the functionality and features 
-
+    # Adam reads about the functionality and features 
+    def test_can_see_homepage_body(self):
+        self.browser.get('http://localhost:8000')
+        assert 'Hello World Template' in self.browser.page_source
 # Adam signs up for an account
 
 # Adam logs in
