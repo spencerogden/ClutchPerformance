@@ -1,5 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
 import unittest
+import time
 
 class ClutchTest(unittest.TestCase):
     def setUp(self):
@@ -30,16 +33,37 @@ class NewVisitorTest(ClutchTest):
 class userSignup(ClutchTest):
     def test_see_sign_up_link(self):
         self.browser.get('http://localhost:8000')
-        login_link = self.browser.find_element_by_link_text("Sign up")
+        signup_link = self.browser.find_element_by_link_text("Sign up")
+        
+        
+        
+        # Adam follows the link
+        signup_link.click()
+        
+        time.sleep(1)
+        
+        name = self.browser.find_element_by_id('id_name')
+        slug = self.browser.find_element_by_id('id_slug')        
+        email = self.browser.find_element_by_id('id_email')
+        
+        name.send_keys("Team Adam")
+        slug.send_keys("TeamAdam")
+        email.send_keys("adam@example.com")
+        
+        email.send_keys(Keys.ENTER)
+        time.sleep(10)
+        
+        assert "Thanks!" in self.browser.page_source
 
 # Adam logs in
 class LoginTest(ClutchTest):
     def test_see_login_link(self):
+        # Adam sees the login link
         self.browser.get('http://localhost:8000')
         login_link = self.browser.find_element_by_link_text("Log in")
         
         
-
+        
 # Adam confirms email address
 
 # Adam visits their profile page
