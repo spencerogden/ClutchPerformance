@@ -27,12 +27,17 @@ class NewVisitorTest(ClutchTest):
         self.assertAlmostEqual(greeting_div.size['height'],116)
         
 # Adam signs up for an account
+class userSignup(ClutchTest):
+    def test_see_sign_up_link(self):
+        self.browser.get('http://localhost:8000')
+        login_link = self.browser.find_element_by_link_text("Sign up")
 
 # Adam logs in
 class LoginTest(ClutchTest):
     def test_see_login_link(self):
         self.browser.get('http://localhost:8000')
         login_link = self.browser.find_element_by_link_text("Log in")
+        
         
 
 # Adam confirms email address
