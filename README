@@ -1,25 +1,41 @@
-Create virtual env:
-WORKON_HOME = ~/.virtualenv
-mkvirtualenv -p python3.6 clutchperformance
+## Install Python 3.6
 
-To start virtualenv:
+## install virtualenvwrapper
+pip3 install virtualenvwrapper
 
+echo "export VIRTUALENVWRAPPER_PYTHON=`which python3`" >> ~/.bash_profile
+echo "source `which virtualenvwrapper.sh`" >> ~/.bash_profile
+echo "export WORKON_HOME=~/.virtualenv" >> ~/.bash_profile
+source ~/.bash_profile
+
+## Create virtual env:
+mkvirtualenv -p python3 clutchperformance
+echo "export DJANGO_SETTINGS_MODULE=ClutchPerformance.settings.dev" >> $WORKON_HOME/clutchperformance/bin/postactivate
+source $WORKON_HOME/clutchperformance/bin/postactivate
+
+## To start virtualenv:
 workon clutchperformance
+## To stop
+deactivate
 
-Install requirements:
+## Install requirements:
 pip install -r requirements/dev.txt
 
-Select settings module:
+## Select settings module:
+
 export DJANGO_SETTINGS_MODULE=ClutchPerformance.settings.dev
 
-Run Functional Tests:
-python tests/functional_tests.py
+## Create superuser
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'spencer@spencerogden.com', 'daisydog')" | python manage.py shell
 
-Run Unit Tests:
-./manage.py test
-
-Run dev server:
+## Run dev server:
 ./manage.py runserver --settings ClutchPerformance.settings.dev
 
-Show all urls:
+## Run Functional Tests:
+python tests/functional_tests.py
+
+## Run Unit Tests:
+./manage.py test
+
+## Show all urls:
 ./manage.py show_urls
