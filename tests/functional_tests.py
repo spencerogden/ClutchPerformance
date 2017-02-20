@@ -57,7 +57,7 @@ class userSignup(ClutchTest):
 
 # Adam logs in
 class LoginTest(ClutchTest):
-    def test_see_login_link(self):
+    def test_login(self):
         # Adam sees the login link
         self.browser.get('http://localhost:8000')
         login_link = self.browser.find_element_by_link_text("Log in")
