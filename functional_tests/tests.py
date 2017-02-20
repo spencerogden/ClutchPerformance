@@ -1,10 +1,10 @@
+import django.contrib.staticfiles.testing
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-import unittest
 import time
 
-class ClutchTest(unittest.TestCase):
+class ClutchTest(django.contrib.staticfiles.testing.StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(executable_path='./geckodriver')
 
@@ -14,25 +14,25 @@ class ClutchTest(unittest.TestCase):
 class NewVisitorTest(ClutchTest):
     def test_can_see_hompage(self):
         # Adam hears about a new site and goes to the home page
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # Adam sees that the name of the app is ClutchPerformance
         assert 'ClutchPerformance' in self.browser.title, "Browser title was: " + self.browser.title
 
     # Adam reads about the functionality and features 
     def test_can_see_homepage_body(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         assert 'Hello World Template' in self.browser.page_source
         
     def test_bootstrap_used_for_styling(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         greeting_div = self.browser.find_element_by_id('greeting')
         self.assertAlmostEqual(greeting_div.size['height'],116)
         
 # Adam signs up for an account
 class userSignup(ClutchTest):
     def test_see_sign_up_link(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         signup_link = self.browser.find_element_by_link_text("Sign up")
         
         
@@ -51,7 +51,7 @@ class userSignup(ClutchTest):
         email.send_keys("adam@example.com")
         
         email.send_keys(Keys.ENTER)
-        time.sleep(10)
+        time.sleep(1)
         
         assert "Thanks!" in self.browser.page_source
 
@@ -59,7 +59,7 @@ class userSignup(ClutchTest):
 class LoginTest(ClutchTest):
     def test_login(self):
         # Adam sees the login link
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         login_link = self.browser.find_element_by_link_text("Log in")
         
         
@@ -95,8 +95,4 @@ class LoginTest(ClutchTest):
 # Adam uploads a text log file to TeamAlpha
 
 # Adam sees the log fil listed in the team files
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
-    
-    
+   

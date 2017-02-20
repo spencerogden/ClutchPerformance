@@ -32,7 +32,7 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 ./manage.py runserver --settings ClutchPerformance.settings.dev
 
 ## Run Functional Tests:
-python tests/functional_tests.py
+python manage.py test functional_tests
 
 ## Run Unit Tests:
 ./manage.py test
