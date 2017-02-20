@@ -32,9 +32,13 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 ./manage.py runserver --settings ClutchPerformance.settings.dev
 
 ## Run Functional Tests:
+# Dev server does not need to be running
 python manage.py test functional_tests
 
-## Run Unit Tests:
+## Run unit tests for individual apps
+./manage.py test landingpage
+
+## Run all tests, functional and unit, for all apps
 ./manage.py test
 
 ## Show all urls:
