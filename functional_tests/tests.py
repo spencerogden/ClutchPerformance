@@ -23,6 +23,12 @@ class ClutchTest(django.contrib.staticfiles.testing.StaticLiveServerTestCase):
         selenium.webdriver.support.ui.WebDriverWait(self.browser, timeout).until(
             selenium.webdriver.support.expected_conditions.staleness_of(old_page)
             )
+            
+    def wait_for_condition(self,expected_condition,timeout=5):
+        selenium.webdriver.support.ui.WebDriverWait(self.browser, timeout).until(
+            expected_condition
+            )
+        
     
 class NewVisitorTest(ClutchTest):
     def test_can_see_hompage(self):
