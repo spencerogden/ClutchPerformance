@@ -1,33 +1,28 @@
-import django.contrib.staticfiles.testing
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
-
 import time
+import contextlib
 
-def wait(function_with_assertion,timeout=5):
-    def modified_fn(*args,**kwargs):
-        start_time = time.time()
-        while time.time() - start_time > timeout:
-            try:
-                return function_with_assertion(*args,**kwargs)
-            except (AssertionError, WebDriverException) as e:
-                time.sleep(0.5)
-        return function_with_assertion(*args,**kwargs)
-    return modified_fn
-    
-@wait
-def wait_for(function_with_assertion):
-    return function_with_assertion()
+import django.contrib.staticfiles.testing
+
+from selenium.webdriver.common.keys import Keys
+import selenium.webdriver.support.ui
+import selenium.webdriver.support.expected_conditions
+
+
     
 class ClutchTest(django.contrib.staticfiles.testing.StaticLiveServerTestCase):
     def setUp(self):
-        self.browser = webdriver.Firefox(executable_path='./geckodriver')
+        self.browser = selenium.webdriver.Firefox(executable_path='./geckodriver')
 
     def tearDown(self):
         self.browser.quit()
+        
+    @contextlib.contextmanager
+    def wait_for_page_load(self,timeout=5):
+        old_page = self.browser.find_element_by_tag_name('html')
+        yield
+        selenium.webdriver.support.ui.WebDriverWait(self.browser, timeout).until(
+            selenium.webdriver.support.expected_conditions.staleness_of(old_page)
+            )
     
 class NewVisitorTest(ClutchTest):
     def test_can_see_hompage(self):
@@ -35,17 +30,18 @@ class NewVisitorTest(ClutchTest):
         self.browser.get(self.live_server_url)
 
         # Adam sees that the name of the app is ClutchPerformance
-        wait_for(lambda: self.assertIn('ClutchPerformance',self.browser.title))
+        self.assertIn('ClutchPerformance',self.browser.title)
 
     # Adam reads about the functionality and features 
     def test_can_see_homepage_body(self):
         self.browser.get(self.live_server_url)
-        wait_for(lambda: self.assertIn('Hello World Template', self.browser.page_source))
+        self.assertIn('Hello World Template', self.browser.page_source)
         
     def test_bootstrap_used_for_styling(self):
         self.browser.get(self.live_server_url)
+            
         greeting_div = self.browser.find_element_by_id('greeting')
-        wait_for(lambda: self.assertAlmostEqual(greeting_div.size['height'],116))
+        self.assertAlmostEqual(greeting_div.size['height'],116)
         
 # Adam signs up for an account
 class userSignup(ClutchTest):
@@ -54,11 +50,10 @@ class userSignup(ClutchTest):
         signup_link = self.browser.find_element_by_link_text("Sign up")
         
         # Adam follows the link
-        signup_link.click()
+        with self.wait_for_page_load():
+            signup_link.click()
         
-        name = WebDriverWait(self.browser, 10).until(
-            expected_conditions.presence_of_element_located((By.ID, 'id_name'))
-        )
+        name = self.browser.find_element_by_id('id_name')
         slug = self.browser.find_element_by_id('id_slug')        
         email = self.browser.find_element_by_id('id_email')
         
@@ -66,11 +61,10 @@ class userSignup(ClutchTest):
         slug.send_keys("TeamAdam")
         email.send_keys("adam@example.com")
         
-        email.send_keys(Keys.ENTER)
+        with self.wait_for_page_load():
+            email.send_keys(Keys.ENTER)
         
-        time.sleep(1) # Should be able to elimiate this? TODO
-        
-        wait_for(lambda: self.assertIn("Thanks!", self.browser.page_source))
+        self.assertIn("Thanks!", self.browser.page_source)
 
 # Adam logs in
 class LoginTest(ClutchTest):
