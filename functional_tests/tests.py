@@ -54,6 +54,10 @@ class userSignup(ClutchTest):
     def test_see_sign_up_link(self):
         self.browser.get(self.live_server_url)
         signup_link = self.browser.find_element_by_link_text("Sign up")
+    
+    def test_sign_up(self):
+        self.browser.get(self.live_server_url)
+        signup_link = self.browser.find_element_by_link_text("Sign up")
         
         # Adam follows the link
         with self.wait_for_page_load():
@@ -74,10 +78,20 @@ class userSignup(ClutchTest):
 
 # Adam logs in
 class LoginTest(ClutchTest):
-    def test_login(self):
+    def test_see_login(self):
         # Adam sees the login link
         self.browser.get(self.live_server_url)
         login_link = self.browser.find_element_by_link_text("Log in")
+        
+    def test_login(self):
+        self.browser.get(self.live_server_url)
+        login_link = self.browser.find_element_by_link_text("Log in")
+        
+        with self.wait_for_page_load():
+            login_link.click()
+            
+        self.assertIn('Clutch',self.browser.title)
+            
         
         
         
