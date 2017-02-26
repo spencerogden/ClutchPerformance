@@ -90,7 +90,7 @@ class LoginTest(ClutchTest):
         with self.wait_for_page_load():
             login_link.click()
             
-        self.assertIn('Clutch',self.browser.title)
+        self.assertIn('Clutch',self.browser.title,"Login link goes to wrong page")
             
         
         
