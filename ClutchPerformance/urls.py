@@ -20,12 +20,22 @@ from django.contrib.auth import views as auth_views
 
 from organizations.backends import invitation_backend
 from organizations.backends import registration_backend
+
+from django.views.generic import TemplateView
   
 urlpatterns = [
-    url(r'^', include('landingpage.urls')), # add a home views
+    url(r'^$',TemplateView.as_view(template_name='landingpage/index.html'), name='index'),
+
     url(r'^admin/', admin.site.urls),
+    
+    # Auth module
     url(r'^auth/', include('django.contrib.auth.urls')),
+    
+    # Organizations URLS
     url(r'^team/',include('organizations.urls')),
-    url(r'^invitations/',include(invitation_backend().get_urls())),
-    url(r'^registration/',include(registration_backend().get_urls())),
+    #url(r'^invitations/',include(invitation_backend().get_urls())),
+    #url(r'^registration/',include(registration_backend().get_urls())),
+    
+    # User registration urls
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
 ]

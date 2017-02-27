@@ -122,3 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(PROJECT_HOME, 'static')]
+
+# django-registrations settings
+ACCOUNT_ACTIVATION_DAYS = 7
+# django-auth settings
+LOGIN_REDIRECT_URL = '/'

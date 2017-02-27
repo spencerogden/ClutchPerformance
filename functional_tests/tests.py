@@ -8,6 +8,20 @@ import selenium.webdriver.support.ui
 import selenium.webdriver.support.expected_conditions
 
 
+from django.contrib import auth
+from django.contrib.auth.models import User
+
+from django.contrib.auth.hashers import make_password
+from factory import DjangoModelFactory, Sequence
+
+
+class UserFactory(DjangoModelFactory):
+    class Meta:
+        model = User
+
+    email = Sequence(lambda n: 'john-doe-{0}@a.com'.format(n))
+    username = Sequence(lambda n: '{0}'.format(n))
+    password = make_password("password")
     
 class ClutchTest(django.contrib.staticfiles.testing.StaticLiveServerTestCase):
     def setUp(self):
@@ -55,7 +69,15 @@ class userSignup(ClutchTest):
         self.browser.get(self.live_server_url)
         signup_link = self.browser.find_element_by_link_text("Sign up")
     
-    def test_sign_up(self):
+    def test_sign_link(self):
+        self.browser.get(self.live_server_url)
+        signup_link = self.browser.find_element_by_link_text("Sign up")
+        
+        # Adam follows the link
+        with self.wait_for_page_load():
+            signup_link.click()
+            
+    def test_sign_form(self):
         self.browser.get(self.live_server_url)
         signup_link = self.browser.find_element_by_link_text("Sign up")
         
@@ -63,16 +85,20 @@ class userSignup(ClutchTest):
         with self.wait_for_page_load():
             signup_link.click()
         
-        name = self.browser.find_element_by_id('id_name')
-        slug = self.browser.find_element_by_id('id_slug')        
         email = self.browser.find_element_by_id('id_email')
+        user = self.browser.find_element_by_id('id_username')
+        pwd1 = self.browser.find_element_by_id('id_password1')
+        pwd2 = self.browser.find_element_by_id('id_password2')
         
-        name.send_keys("Team Adam")
-        slug.send_keys("TeamAdam")
+        submit = self.browser.find_element_by_id('id_submit')
+        
         email.send_keys("adam@example.com")
+        user.send_keys("adam")
+        pwd1.send_keys("fjrtufjrjtj")
+        pwd2.send_keys("fjrtufjrjtj")
         
-        with self.wait_for_page_load():
-            email.send_keys(Keys.ENTER)
+        with self.wait_for_page_load(timeout=15):
+            submit.click()
         
         self.assertIn("Thanks!", self.browser.page_source)
 
@@ -83,7 +109,7 @@ class LoginTest(ClutchTest):
         self.browser.get(self.live_server_url)
         login_link = self.browser.find_element_by_link_text("Log in")
         
-    def test_login(self):
+    def test_login_link(self):
         self.browser.get(self.live_server_url)
         login_link = self.browser.find_element_by_link_text("Log in")
         
@@ -91,7 +117,42 @@ class LoginTest(ClutchTest):
             login_link.click()
             
         self.assertIn('Clutch',self.browser.title,"Login link goes to wrong page")
+    
+    def test_login_form(self):
+        self.browser.get(self.live_server_url)
+        login_link = self.browser.find_element_by_link_text("Log in")
+        
+        with self.wait_for_page_load():
+            login_link.click()
             
+        user = self.browser.find_element_by_id('id_username')
+        pwd = self.browser.find_element_by_id('id_password')
+        
+    def test_login(self):
+        self.browser.get(self.live_server_url)
+        login_link = self.browser.find_element_by_link_text("Log in")
+        
+        adam_user = UserFactory.create(
+            username='adam',
+            password=make_password("fjrtufjrjtj"),
+            email='adam@example.com',
+            )
+        
+        with self.wait_for_page_load():
+            login_link.click()
+            
+        user = self.browser.find_element_by_id('id_username')
+        pwd = self.browser.find_element_by_id('id_password')
+        
+        user.send_keys("adam")
+        pwd.send_keys("fjrtufjrjtj")
+        
+        with self.wait_for_page_load():
+            pwd.send_keys(Keys.ENTER)
+            
+        self.assertIn(adam_user.email, self.browser.page_source)
+        
+        
         
         
         
