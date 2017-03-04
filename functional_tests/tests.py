@@ -1,7 +1,9 @@
 import time
 import contextlib
+import re
 
 import django.contrib.staticfiles.testing
+import django.core
 
 from selenium.webdriver.common.keys import Keys
 import selenium.webdriver.support.ui
@@ -101,6 +103,55 @@ class userSignup(ClutchTest):
             submit.click()
         
         self.assertIn("Thanks!", self.browser.page_source)
+        
+    # Adam confirms email address
+    def test_validate_email(self):
+        self.browser.get(self.live_server_url)
+        signup_link = self.browser.find_element_by_link_text("Sign up")
+        
+        # Adam follows the link
+        with self.wait_for_page_load():
+            signup_link.click()
+        
+        email = self.browser.find_element_by_id('id_email')
+        user = self.browser.find_element_by_id('id_username')
+        pwd1 = self.browser.find_element_by_id('id_password1')
+        pwd2 = self.browser.find_element_by_id('id_password2')
+        
+        submit = self.browser.find_element_by_id('id_submit')
+        
+        email.send_keys("adam@example.com")
+        user.send_keys("adam")
+        pwd1.send_keys("fjrtufjrjtj")
+        pwd2.send_keys("fjrtufjrjtj")
+        
+        with self.wait_for_page_load(timeout=15):
+            submit.click()
+        
+        self.assertIn("Thanks!", self.browser.page_source)
+        
+        email = django.core.mail.outbox[0]
+        self.assertIn("adam@example.com", email.to)
+        self.assertEqual(email.subject,"Please activate your Clutch Account")
+        
+        self.assertIn("Activate Clutch Account", email.body)
+        url_search = re.search(r'http://.+/.+$',email.body)
+        
+        if not url_search:
+            self.fail("Couldn't find activation url")
+        url = url_search.group(0)
+        self.assertIn(self.server_url,url)
+        
+        self.browser.get(url)
+        
+        self.wait_for(
+            lambda: self.browser.find_element_by_link_text('Log out')
+        )
+        
+        adam_user = User.objects.get(username="adam")
+        
+        self.Assert(adam_user.is_active())
+        
 
 # Adam logs in
 class LoginTest(ClutchTest):
@@ -152,11 +203,8 @@ class LoginTest(ClutchTest):
             
         self.assertIn(adam_user.email, self.browser.page_source)
         
-        
-        
-        
-        
-# Adam confirms email address
+       
+          
 
 # Adam visits their profile page
 
