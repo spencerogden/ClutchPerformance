@@ -132,7 +132,7 @@ class userSignup(ClutchTest):
         
         email = django.core.mail.outbox[0]
         self.assertIn("adam@example.com", email.to)
-        self.assertEqual(email.subject,"Please activate your Clutch Account")
+        self.assertEqual(email.subject,"Please Activate Your Clutch Account")
         
         self.assertIn("Activate Clutch Account", email.body)
         url_search = re.search(r'http://.+/.+$',email.body)

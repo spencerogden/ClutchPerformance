@@ -1,5 +1,11 @@
 {% load i18n %}
-{% trans "Activate account at" %} {{ site.name }}:
+{% trans "Thank you for signing up for " %} {{ site.name }}!
+
+{% trans "Please follow the link below to activate your account." %}
+
+<a href='http://{{ site.domain }}{% url 'registration_activate' activation_key %}'>{% blocktrans %}Activate {{ site.name }} Account{% endblocktrans %}</a>
+
+{% trans "If you have difficulty following the link, please copy the URL below into your browser." %}
 
 http://{{ site.domain }}{% url 'registration_activate' activation_key %}
 
