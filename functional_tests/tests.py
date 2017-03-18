@@ -102,7 +102,7 @@ class userSignup(ClutchTest):
         with self.wait_for_page_load(timeout=15):
             submit.click()
         
-        self.assertIn("Thanks!", self.browser.page_source)
+        self.assertIn("Please check your email", self.browser.page_source)
         
     # Adam confirms email address
     def test_validate_email(self):
@@ -128,30 +128,34 @@ class userSignup(ClutchTest):
         with self.wait_for_page_load(timeout=15):
             submit.click()
         
-        self.assertIn("Thanks!", self.browser.page_source)
+        self.assertIn("Please check your email", self.browser.page_source)
         
         email = django.core.mail.outbox[0]
+        
+        print('-'*20,email.body)
+        
         self.assertIn("adam@example.com", email.to)
         self.assertEqual(email.subject,"Please Activate Your Clutch Account")
         
         self.assertIn("Activate Clutch Account", email.body)
-        url_search = re.search(r'http://.+/.+$',email.body)
+        url_search = re.search(r"http://.+/accounts/activate/[^\s']+",email.body)
         
         if not url_search:
             self.fail("Couldn't find activation url")
         url = url_search.group(0)
-        self.assertIn(self.server_url,url)
+        print("URL is",url)
+        self.assertIn(self.live_server_url,url)
         
         self.browser.get(url)
         
-        self.wait_for(
-            lambda: self.browser.find_element_by_link_text('Log out')
+        self.wait_for_condition(
+            lambda s: "activating" in self.browser.page_source
         )
         
         adam_user = User.objects.get(username="adam")
         
-        self.Assert(adam_user.is_active())
-        
+        self.assertTrue(adam_user.is_active)
+        print(self.browser.current_url)
 
 # Adam logs in
 class LoginTest(ClutchTest):
